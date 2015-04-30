@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by litemn on 29.04.15.
@@ -33,4 +37,52 @@ public class EditDistance {
         
         return d[x][y];
     }
+
+    public static String translate(String s){
+        Map<String,String> map = new HashMap();
+        map.put("a","ф");
+        map.put("s","ы");
+        map.put("d","в");
+        map.put("f","а");
+        map.put("q","й");
+        map.put("w","ц");
+        map.put("e","у");
+        map.put("r","к");
+        map.put("t","е");
+        map.put("y","н");
+        map.put("u","г");
+        map.put("i","ш");
+        map.put("o","щ");
+        map.put("p","з");
+        map.put("g","п");
+        map.put("h","р");
+        map.put("j","о");
+        map.put("k","л");
+        map.put("l","д");
+        map.put(";","ж");
+        map.put("'","э");
+        map.put("z","я");
+        map.put("x","ч");
+        map.put("c","с");
+        map.put("v","м");
+        map.put("b","и");
+        map.put("n","т");
+        map.put("m","ь");
+        map.put(",","б");
+        map.put(".","ю");
+        map.put("[","х");
+        map.put("]","ъ");
+        s=s.toLowerCase();
+        Pattern p = Pattern.compile("[a-z|'.'|',;'|\\[]|]");
+        Matcher m = p.matcher(s);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()){
+            m.appendReplacement(sb, map.get(m.group()));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+
+    }
+    
+    
 }

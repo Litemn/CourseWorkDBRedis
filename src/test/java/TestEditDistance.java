@@ -13,4 +13,13 @@ public class TestEditDistance {
         assert(EditDistance.distance("a","b")==2);
         assert(EditDistance.distance("aa","b")==3);
     }
+
+    @Test
+    public void testTranslate(){
+        System.out.print(EditDistance.translate("qwertyuiop[]asdfghjkl;'zxcvbnm,."));
+        assert("в".equals(EditDistance.translate("d")));
+        assert("йцукенгшщзхъфывапролджэячсмитьбю".equals(EditDistance.translate("qwertyuiop[]asdfghjkl;'zxcvbnm,.")));
+
+
+    }
 }
