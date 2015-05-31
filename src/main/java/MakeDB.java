@@ -24,7 +24,7 @@ public class MakeDB {
 
             JSONArray   ar  = (JSONArray)obj;
 
-            int i = 1;
+           // int i = 1;
             for(Object s: ar){
                 Car car = gson.fromJson(s.toString(),Car.class);
                 HashMap<String,String> map = new HashMap<String, String>();
@@ -42,8 +42,8 @@ public class MakeDB {
                 if(car.getId_car()>maxCarId){
                     maxCarId = car.getId_car();
                 }
-                jedis.set("MAXID",i+"");
-                jedis.hmset("car:id:"+ i++,map);
+                jedis.set("MAXID",maxCarId+"");
+                jedis.hmset("car:id:"+ car.getId_car(),map);
 
             }
 
