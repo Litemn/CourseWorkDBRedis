@@ -17,19 +17,19 @@ fun main(args: Array<String>) {
                 val map = HashMap<String, String>()
                 while (it.hasNext()) {
                     when (it.next()) {
-                        "model" -> {
+                        "id_model" -> {
                             map.put("id_model", it.next())
                         }
-                        "engine" -> {
+                        "id_engine" -> {
                             map.put("id_engine", it.next())
                         }
-                        "body" -> {
+                        "id_body_type" -> {
                             map.put("id_body_type", it.next())
                         }
-                        "date" -> {
+                        "date_release" -> {
                             map.put("date_release", it.next())
                         }
-                        "mil" -> {
+                        "mileage" -> {
                             map.put("mileage", it.next())
                         }
                         "pts" -> {
@@ -41,10 +41,10 @@ fun main(args: Array<String>) {
                         "price" -> {
                             map.put("price", it.next())
                         }
-                        "photo" -> {
+                        "photo_id" -> {
                             map.put("photo_id", it.next())
                         }
-                        "final" -> {
+                        "final_price" -> {
                             map.put("final_price", it.next())
                         }
                         else -> {
@@ -63,8 +63,26 @@ fun main(args: Array<String>) {
                 val ID = jedis.get("MAXID")
                 map.put("id_car",ID)
                 jedis.hmset("car:id:" +ID, map)
+                println("new id is "+ ID)
 
             }
+
+            "del"->{
+                println("R you sure?(yes/no)")
+                when(readLine()){
+                    "yes" ->{
+
+                       if(jedis.del("car:id:"+args[1])==1L){
+                           println("Deleted")
+                       }else{
+                           println("Try again")
+                       }
+                    }
+                    else -> println("Canceled")
+                }
+
+            }
+
             else -> print("error")
         }
     }
