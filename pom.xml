@@ -95,6 +95,13 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+
     </dependencies>
     <properties>
         <kotlin.version>0.12.200</kotlin.version>

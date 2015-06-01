@@ -1,6 +1,8 @@
 import com.sun.xml.internal.bind.v2.TODO
 import com.sun.xml.internal.fastinfoset.util.StringArray
+import org.apache.commons.validator.UrlValidator
 import redis.clients.jedis.Jedis
+import java.net.URL
 import java.util.HashMap
 import kotlin.text.Regex
 
@@ -23,6 +25,7 @@ fun main(args: Array<String>) {
                 it.next()
                 val map = HashMap<String, String>()
                 while (it.hasNext()) {
+                    var value : String = ""
                     when (it.next()) {
                         "id_model" -> {
                             map.put("id_model", it.next())
@@ -40,7 +43,13 @@ fun main(args: Array<String>) {
                             map.put("mileage", it.next())
                         }
                         "pts" -> {
-                            map.put("pts", it.next())
+                            val pattern : Regex = "^[0-9]{2}[а-яА-Я]{2}[0-9]+$".toRegex()
+                            value = it.next()
+                            if(value.matches(pattern)) {
+                                map.put("pts", value)
+                            }else{
+                                println("Wrong pts")
+                            }
                         }
                         "color"  -> {
                             map.put("color", it.next())
@@ -49,6 +58,7 @@ fun main(args: Array<String>) {
                             map.put("price", it.next())
                         }
                         "photo_id" -> {
+
                             map.put("photo_id", it.next())
                         }
                         "final_price" -> {
@@ -75,9 +85,9 @@ fun main(args: Array<String>) {
             }
 
             "del"->{
+
                 if(args.size()==2) {
                     println("R you sure?(yes/no)")
-
                     val temp = readLine().toString()
                     if (temp.startsWith("y")) {
                         if (jedis.del("car:id:" + args[1]) == 1L) {
