@@ -1,5 +1,8 @@
+import com.sun.xml.internal.bind.v2.TODO
+import com.sun.xml.internal.fastinfoset.util.StringArray
 import redis.clients.jedis.Jedis
 import java.util.HashMap
+import kotlin.text.Regex
 
 /**
  * Created by litemn on 30.05.15.
@@ -7,7 +10,11 @@ import java.util.HashMap
 
 fun main(args: Array<String>) {
     val jedis = Jedis("localhost")
-    if (args.size() > 0) {
+    val param = arrayOf("id_model","id_engine","id_body_type","date_release","mileage", "pts","color", "price", "photo_id", "final_price")
+
+
+    if (args.size() > 0)
+
         when (args[0]) {
             "new" -> {
                 if (args.size() != 21)
@@ -35,7 +42,7 @@ fun main(args: Array<String>) {
                         "pts" -> {
                             map.put("pts", it.next())
                         }
-                        "color" -> {
+                        "color"  -> {
                             map.put("color", it.next())
                         }
                         "price" -> {
@@ -68,17 +75,35 @@ fun main(args: Array<String>) {
             }
 
             "del"->{
-                println("R you sure?(yes/no)")
-                when(readLine()){
-                    "yes" ->{
+                if(args.size()==2) {
+                    println("R you sure?(yes/no)")
 
-                       if(jedis.del("car:id:"+args[1])==1L){
-                           println("Deleted")
-                       }else{
-                           println("Try again")
-                       }
+                    val temp = readLine().toString()
+                    if (temp.startsWith("y")) {
+                        if (jedis.del("car:id:" + args[1]) == 1L) {
+                            println("Deleted")
+                        } else {
+                            println("Not ok")
+                        }
+
+                    } else  println("Canceled")
+
+                } else println("Wrong numbers of param ")
+
+            }
+
+            "edit" -> {
+                if(args.size()>=4) {
+                    val it : Iterator<String> = args.copyOfRange(2,args.size()).iterator()
+                    while(it.hasNext()) {
+                        val temp = it.next()
+                        if(temp in param){
+                          //  TODO edit params
+                        } else {
+                            error("Wrong")
+                        }
                     }
-                    else -> println("Canceled")
+
                 }
 
             }
@@ -87,4 +112,3 @@ fun main(args: Array<String>) {
         }
     }
 
-}
