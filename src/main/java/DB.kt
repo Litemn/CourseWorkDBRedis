@@ -26,17 +26,17 @@ fun main(args: Array<String>) {
                 val map = HashMap<String, String>()
                 while (it.hasNext()) {
                     var value : String = ""
-                    when (it.next()) {
+                    when (it.next().toLowerCase().replace("_","")) {
                         "model" -> {
                             map.put("model", it.next())
                         }
                         "engine" -> {
                             map.put("engine", it.next())
                         }
-                        "bodyType" -> {
+                        "bodytype" -> {
                             map.put("bodyType", it.next())
                         }
-                        "date_release" -> {
+                        "daterelease" -> {
                             map.put("date_release", it.next())
                         }
                         "mileage" -> {
@@ -57,11 +57,11 @@ fun main(args: Array<String>) {
                         "price" -> {
                             map.put("price", it.next())
                         }
-                        "photo_id" -> {
+                        "photoid" -> {
 
                             map.put("photo_id", it.next())
                         }
-                        "final_price" -> {
+                        "finalprice" -> {
                             map.put("final_price", it.next())
                         }
                         else -> {
