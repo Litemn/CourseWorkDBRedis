@@ -2,9 +2,9 @@
  * Created by litemn on 21.04.15.
  */
 public class Car {
-    public Car(int id_car, int id_model, int id_engine, int id_body_type, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
+    public Car(int id_car, int model, int id_engine, int id_body_type, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
         this.id_car = id_car;
-        this.id_model = id_model;
+        this.model = model;
         this.id_engine = id_engine;
         this.id_body_type = id_body_type;
         this.mileage = mileage;
@@ -18,12 +18,12 @@ public class Car {
 
     private int id_car;
 
-    public int getId_model() {
-        return id_model;
+    public int getModel() {
+        return model;
     }
 
-    public void setId_model(int id_model) {
-        this.id_model = id_model;
+    public void setModel(int model) {
+        this.model = model;
     }
 
     public int getId_car() {
@@ -106,7 +106,7 @@ public class Car {
         this.photo_id = photo_id;
     }
 
-    private int id_model;
+    private int model;
     private int id_engine;
     private int id_body_type;
     private int mileage;

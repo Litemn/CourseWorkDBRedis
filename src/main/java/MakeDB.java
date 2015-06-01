@@ -1,12 +1,9 @@
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import redis.clients.jedis.Jedis;
 
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -29,7 +26,7 @@ public class MakeDB {
                 Car car = gson.fromJson(s.toString(),Car.class);
                 HashMap<String,String> map = new HashMap<String, String>();
                 map.put("id_car",car.getId_car()+"");
-                map.put("id_model",car.getId_model()+"");
+                map.put("id_model",car.getModel()+"");
                 map.put("id_engine",car.getId_engine()+"");
                 map.put("id_body_type", car.getId_body_type() + "");
                 map.put("date_release", car.getDate_realease());
