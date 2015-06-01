@@ -27,8 +27,8 @@ public class MakeDB {
                 HashMap<String,String> map = new HashMap<String, String>();
                 map.put("id_car",car.getId_car()+"");
                 map.put("id_model",car.getModel()+"");
-                map.put("id_engine",car.getId_engine()+"");
-                map.put("id_body_type", car.getId_body_type() + "");
+                map.put("id_engine",car.getEngine()+"");
+                map.put("id_body_type", car.getBodyType() + "");
                 map.put("date_release", car.getDate_realease());
                 map.put("mileage", car.getMileage() + "");
                 map.put("pts",car.getPts());

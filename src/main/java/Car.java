@@ -2,11 +2,11 @@
  * Created by litemn on 21.04.15.
  */
 public class Car {
-    public Car(int id_car, int model, int id_engine, int id_body_type, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
+    public Car(int id_car, int model, int engine, int bodyType, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
         this.id_car = id_car;
         this.model = model;
-        this.id_engine = id_engine;
-        this.id_body_type = id_body_type;
+        this.engine = engine;
+        this.bodyType = bodyType;
         this.mileage = mileage;
         this.price = price;
         this.final_price = final_price;
@@ -34,20 +34,20 @@ public class Car {
         this.id_car = id_car;
     }
 
-    public int getId_engine() {
-        return id_engine;
+    public int getEngine() {
+        return engine;
     }
 
-    public void setId_engine(int id_engine) {
-        this.id_engine = id_engine;
+    public void setEngine(int engine) {
+        this.engine = engine;
     }
 
-    public int getId_body_type() {
-        return id_body_type;
+    public int getBodyType() {
+        return bodyType;
     }
 
-    public void setId_body_type(int id_body_type) {
-        this.id_body_type = id_body_type;
+    public void setBodyType(int bodyType) {
+        this.bodyType = bodyType;
     }
 
     public int getMileage() {
@@ -107,8 +107,8 @@ public class Car {
     }
 
     private int model;
-    private int id_engine;
-    private int id_body_type;
+    private int engine;
+    private int bodyType;
     private int mileage;
     private int price;
     private int final_price;

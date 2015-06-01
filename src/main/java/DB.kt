@@ -12,7 +12,7 @@ import kotlin.text.Regex
 
 fun main(args: Array<String>) {
     val jedis = Jedis("localhost")
-    val param = arrayOf("id_model","id_engine","id_body_type","date_release","mileage", "pts","color", "price", "photo_id", "final_price")
+    val param = arrayOf("model","engine","bodyType","date_release","mileage", "pts","color", "price", "photo_id", "final_price")
 
 
     if (args.size() > 0)
@@ -27,14 +27,14 @@ fun main(args: Array<String>) {
                 while (it.hasNext()) {
                     var value : String = ""
                     when (it.next()) {
-                        "id_model" -> {
-                            map.put("id_model", it.next())
+                        "model" -> {
+                            map.put("model", it.next())
                         }
-                        "id_engine" -> {
-                            map.put("id_engine", it.next())
+                        "engine" -> {
+                            map.put("engine", it.next())
                         }
-                        "id_body_type" -> {
-                            map.put("id_body_type", it.next())
+                        "bodyType" -> {
+                            map.put("bodyType", it.next())
                         }
                         "date_release" -> {
                             map.put("date_release", it.next())
