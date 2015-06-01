@@ -42,6 +42,9 @@ public class MakeDB {
                 jedis.set("MAXID",maxCarId+"");
                 jedis.hmset("car:id:"+ car.getId_car(),map);
 
+
+
+
             }
 
 

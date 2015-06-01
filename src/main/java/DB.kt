@@ -1,4 +1,8 @@
+import com.sun.xml.internal.bind.v2.TODO
+import com.sun.xml.internal.fastinfoset.util.StringArray
+import org.apache.commons.validator.UrlValidator
 import redis.clients.jedis.Jedis
+import java.net.URL
 import java.util.HashMap
 import kotlin.text.Regex
 
@@ -8,21 +12,33 @@ import kotlin.text.Regex
 
 fun main(args: Array<String>) {
     val jedis = Jedis("localhost")
-    val param = arrayOf("model", "engine", "bodyType", "daterelease", "mileage", "pts", "color", "price", "photoid", "finalprice")
+    val param = arrayOf("model","engine","bodytype","daterelease","mileage", "pts","color", "price", "photoid", "finalprice")
 
 
     if (args.size() > 0)
 
-        when (args[0]) {
-            "new" -> {
-                if (args.size() != 21)
-                    error("Wrond number of param")
+        when (args[0].toLowerCase()) {
+            "new","edit" -> {
+
                 val it: Iterator<String> = args.iterator()
+                var ID = jedis.get("MAXID")
                 it.next()
-                val map = HashMap<String, String>()
+                var map:MutableMap<String,String> = HashMap<String, String>()
+                if(it.next().toLowerCase() == "id"){
+                   ID = it.next()
+
+                    if(ID !is String) {
+                      map =  jedis.hgetAll("car:id:" + ID)
+                    }
+                }else {
+                    jedis.incr("MAXID")
+                }
+
+
                 while (it.hasNext()) {
-                    var value: String = ""
-                    when (it.next().toLowerCase().replace("_", "")) {
+                    var value : String = ""
+                    val p = it.next().toLowerCase().replace("_","")
+                    when (p) {
                         "model" -> {
                             map.put("model", it.next())
                         }
@@ -45,15 +61,15 @@ fun main(args: Array<String>) {
                             map.put("mileage", it.next())
                         }
                         "pts" -> {
-                            val pattern: Regex = "^[0-9]{2}[а-яА-Я]{2}[0-9]+$".toRegex()
+                            val pattern : Regex = "^[0-9]{2}[а-яА-Я]{2}[0-9]+$".toRegex()
                             value = it.next()
-                            if (value.matches(pattern)) {
+                            if(value.matches(pattern)) {
                                 map.put("pts", value)
-                            } else {
+                            }else{
                                 println("Wrong pts")
                             }
                         }
-                        "color" -> {
+                        "color"  -> {
                             map.put("color", it.next())
                         }
                         "price" -> {
@@ -64,11 +80,11 @@ fun main(args: Array<String>) {
                             map.put("photo_id", it.next())
                         }
                         "finalprice" -> {
-                            map.put("finalprice", it.next())
+                            map.put("final_price", it.next())
                         }
                         else -> {
-                            println("error")
-                            error("Wrond Param")
+                            println("param "+p+" wrong")
+                            it.next()
                         }
 
 
@@ -77,18 +93,15 @@ fun main(args: Array<String>) {
 
                 }
 
-
-                jedis.incr("MAXID")
-                val ID = jedis.get("MAXID")
-                map.put("id_car", ID)
-                jedis.hmset("car:id:" + ID, map)
-                println("new id is " + ID)
+                map.put("id_car",ID)
+                jedis.hmset("car:id:" +ID, map)
+                println("changes blabla id is "+ ID)
 
             }
 
-            "del" -> {
+            "del"->{
 
-                if (args.size() == 2) {
+                if(args.size()==2) {
                     println("R you sure?(yes/no)")
                     val temp = readLine().toString()
                     if (temp.startsWith("y")) {
@@ -98,19 +111,20 @@ fun main(args: Array<String>) {
                             println("Not ok")
                         }
 
-                    } else println("Canceled")
+                    } else  println("Canceled")
 
                 } else println("Wrong numbers of param ")
 
             }
 
-            "edit" -> {
-                if (args.size() >= 4) {
-                    val it: Iterator<String> = args.copyOfRange(2, args.size()).iterator()
-                    while (it.hasNext()) {
+            "x" -> {
+                if(args.size()>=4) {
+                    val map = HashMap<String, String>()
+                    val it : Iterator<String> = args.copyOfRange(2,args.size()).iterator()
+                    while(it.hasNext()) {
                         val temp = it.next()
-                        if (temp in param) {
-                            //  TODO edit params
+                        if(temp in param){
+                          //  TODO edit params
                         } else {
                             error("Wrong")
                         }
@@ -122,5 +136,5 @@ fun main(args: Array<String>) {
 
             else -> print("error")
         }
-}
+    }
 
