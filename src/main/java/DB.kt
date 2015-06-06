@@ -133,6 +133,31 @@ fun main(args: Array<String>) {
 
                 }
             }
+            "search"->{
+                if(args.size()>2){
+                    when(args[1].toLowerCase()){
+                        "color" -> {
+                           var s: MutableSet<String> = jedis.smembers(MakeDB.COLOR_SET)
+                            if(args[2] in s){
+                               var s: MutableSet<String> = jedis.smembers(args[2])
+                                for(i in s){
+                                    var map: MutableMap<String, String> = HashMap<String, String>()
+                                    map=jedis.hgetAll(MakeDB.ID_PREFIX+i)
+                                    for(item in map){
+                                        println(item.getKey()+" - "+item.getValue())
+                                    }
+                                    println("")
+                                }
+
+                            }else {
+                                println("No car with this color")
+                            }
+                        }
+                    }
+                }
+
+
+            }
 
             else -> print("error")
         }
