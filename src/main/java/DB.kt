@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
             "new","edit" -> {
 
                 val it: Iterator<String> = args.iterator()
-                var ID = jedis.get("MAXID")
+                var ID = jedis.get(MakeDB.MAXID)
 
                 var map:MutableMap<String,String> = HashMap<String, String>()
                 if(it.hasNext()&&it.next().toLowerCase() == "id"){
@@ -30,10 +30,10 @@ fun main(args: Array<String>) {
                    ID = it.next()
 
                     if(ID !is String) {
-                      map =  jedis.hgetAll("car:id:" + ID)
+                      map =  jedis.hgetAll(MakeDB.ID_PREFIX + ID)
                     }
                 }else {
-                    jedis.incr("MAXID")
+                    jedis.incr(MakeDB.MAXID)
                 }
 
 
@@ -42,47 +42,47 @@ fun main(args: Array<String>) {
                     val p = it.next().toLowerCase().replace("_","")
                     when (p) {
                         "model" -> {
-                            map.put("model", it.next())
+                            map.put(MakeDB.MODEL, it.next())
                         }
                         "engine" -> {
-                            map.put("engine", it.next())
+                            map.put(MakeDB.ENGINE, it.next())
                         }
                         "bodytype" -> {
-                            map.put("bodyType", it.next())
+                            map.put(MakeDB.BODY_TYPE, it.next())
                         }
                         "daterelease" -> {
                             val pattern: Regex = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$".toRegex()
                             value = it.next()
                             if (value.matches(pattern)) {
-                                map.put("daterelease", value)
+                                map.put(MakeDB.DATE_RELEASE, value)
                             } else {
                                 println("Wrong date release")
                             }
                         }
                         "mileage" -> {
-                            map.put("mileage", it.next())
+                            map.put(MakeDB.MILEAGE, it.next())
                         }
                         "pts" -> {
                             val pattern : Regex = "^[0-9]{2}_[а-яА-Я]{2}_[0-9]+$".toRegex()
                             value = it.next()
                             if(value.matches(pattern)) {
-                                map.put("pts",  value.replace("_"," "))
+                                map.put(MakeDB.PTS,  value.replace("_"," "))
                             }else{
                                 println("Wrong pts")
                             }
                         }
                         "color"  -> {
-                            map.put("color", it.next())
+                            map.put(MakeDB.COLOR, it.next())
                         }
                         "price" -> {
-                            map.put("price", it.next())
+                            map.put(MakeDB.PRICE, it.next())
                         }
                         "photoid" -> {
 
-                            map.put("photo_id", it.next())
+                            map.put(MakeDB.PHOTO_ID, it.next())
                         }
                         "finalprice" -> {
-                            map.put("final_price", it.next())
+                            map.put(MakeDB.FINAL_PRICE, it.next())
                         }
                         else -> {
                             println("param "+p+" wrong")
@@ -96,8 +96,8 @@ fun main(args: Array<String>) {
 
                 }
 
-                map.put("id_car",ID)
-                jedis.hmset("car:id:" +ID, map)
+                map.put(MakeDB.ID_CAR,ID)
+                jedis.hmset(MakeDB.ID_PREFIX +ID, map)
                 println("changes item with id "+ ID)
 
             }
@@ -108,7 +108,7 @@ fun main(args: Array<String>) {
                     println("R you sure?(yes/no)")
                     val temp = readLine().toString()
                     if (temp.startsWith("y")) {
-                        if (jedis.del("car:id:" + args[1]) == 1L) {
+                        if (jedis.del(MakeDB.ID_PREFIX + args[1]) == 1L) {
                             println("Deleted")
                         } else {
                             println("Not ok")
@@ -125,7 +125,7 @@ fun main(args: Array<String>) {
                     if(args[1].matches("[0-9]+".toRegex())) {
 
                         var map: MutableMap<String, String> = HashMap<String, String>()
-                        map=jedis.hgetAll("car:id:"+args[1])
+                        map=jedis.hgetAll(MakeDB.ID_PREFIX+args[1])
                         for(item in map){
                             println(item.getKey()+" - "+item.getValue())
                         }
