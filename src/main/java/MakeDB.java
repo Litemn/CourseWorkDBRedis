@@ -27,6 +27,7 @@ public class MakeDB {
     public static final String ZMILAGE = "MILAGE";
     public static final String MAXID = "MAXID";
     public static final String ID_PREFIX = "car:id:";
+    public static final String COLOR_SET = "COLOR_SET";
 
     public static void main(String[] arg){
         Gson gson = new Gson();
@@ -60,6 +61,8 @@ public class MakeDB {
                 jedis.zadd(CARSPRICE,car.getPrice(),car.getId_car()+"");
                 jedis.zadd(FINALCARSPRICE,car.getFinal_price(),car.getId_car()+"");
                 jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
+                jedis.sadd(COLOR_SET,car.getColor().toLowerCase());
+
                 jedis.set(MAXID, maxCarId+"");
                 jedis.hmset(ID_PREFIX + car.getId_car(),map);
 
