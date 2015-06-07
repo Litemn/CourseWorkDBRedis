@@ -23,7 +23,7 @@ public class MakeJson {
         try {
             writer = new PrintWriter("cars2.json");
             writer.println("[");
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10000; i++) {
                 mileage = gen.nextInt(999999);
                 color = colors[mileage % colors.length];
                 pts = (mileage % 90 + 10) + " " + color.charAt(0) + color.charAt(2) + " " + mileage;

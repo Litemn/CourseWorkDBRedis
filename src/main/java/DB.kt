@@ -128,7 +128,7 @@ fun main(args: Array<String>) {
                         var map: MutableMap<String, String> = HashMap<String, String>()
                         map = jedis.hgetAll(MakeDB.ID_PREFIX + args[1])
                         for (item in map) {
-                            if (item.getKey()=="daterelease")
+                            if (item.getKey()=="date_release")
                             {
                                 val format = SimpleDateFormat("dd MMMM yyyy").format(Date((item.getValue().toLong() * 1000).toLong()))
                                 println(item.getKey() + " - " + format)
@@ -152,7 +152,7 @@ fun main(args: Array<String>) {
                                     var map: MutableMap<String, String> = HashMap<String, String>()
                                     map = jedis.hgetAll(MakeDB.ID_PREFIX + i)
                                     for (item in map) {
-                                        if (item.getKey()=="daterelease")
+                                        if (item.getKey()=="date_release")
                                         {
                                             val format = SimpleDateFormat("dd MMMM yyyy").format(Date((item.getValue().toLong() * 1000).toLong()))
                                             println(item.getKey() + " - " + format)
@@ -177,7 +177,7 @@ fun main(args: Array<String>) {
                                             var map: MutableMap<String, String> = HashMap<String, String>()
                                             map = jedis.hgetAll(MakeDB.ID_PREFIX + i)
                                             for (item in map) {
-                                                if (item.getKey()=="daterelease")
+                                                if (item.getKey()=="date_release")
                                                 {
                                                     val format = SimpleDateFormat("dd MMMM yyyy").format(Date((item.getValue().toLong() * 1000).toLong()))
                                                     println(item.getKey() + " - " + format)
@@ -229,7 +229,7 @@ fun main(args: Array<String>) {
                         for (k in res) {
                             val map = jedis.hgetAll(MakeDB.ID_PREFIX + k)
                             for (item in map) {
-                                if (item.getKey()=="daterelease")
+                                if (item.getKey()=="date_release")
                                 {
                                     val format = SimpleDateFormat("dd MMMM yyyy").format(Date((item.getValue().toLong() * 1000).toLong()))
                                     println(item.getKey() + " - " + format)
@@ -251,7 +251,7 @@ fun main(args: Array<String>) {
                                     count += 1
                                     val map = jedis.hgetAll(MakeDB.ID_PREFIX + k)
                                     for (item in map) {
-                                        if (item.getKey()=="daterelease")
+                                        if (item.getKey()=="date_release")
                                         {
                                             val format = SimpleDateFormat("dd MMMM yyyy").format(Date((item.getValue().toLong() * 1000).toLong()))
                                             println(item.getKey() + " - " + format)
