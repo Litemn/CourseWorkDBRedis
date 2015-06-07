@@ -10,6 +10,8 @@ import kotlin.text.Regex
  * Created by litemn on 30.05.15.
  */
 
+
+
 fun main(args: Array<String>) {
     val jedis = Jedis("localhost")
     val param = arrayOf("model","engine","bodytype","daterelease","mileage", "pts","color", "price", "photoid", "finalprice")
@@ -135,11 +137,12 @@ fun main(args: Array<String>) {
             }
             "search"->{
                 if(args.size()>2){
+                    val find: String = EditDistance.translate(args[2])
                     when(args[1].toLowerCase()){
                         "color" -> {
                            var s: MutableSet<String> = jedis.smembers(MakeDB.COLOR_SET)
-                            if(args[2] in s){
-                               var s: MutableSet<String> = jedis.smembers(args[2])
+                            if(find in s){
+                               var s: MutableSet<String> = jedis.smembers(find)
                                 for(i in s){
                                     var map: MutableMap<String, String> = HashMap<String, String>()
                                     map=jedis.hgetAll(MakeDB.ID_PREFIX+i)
@@ -153,9 +156,10 @@ fun main(args: Array<String>) {
                             }else {
                                 var s: MutableSet<String> = jedis.smembers(MakeDB.COLOR_SET)
                                 var count :Int = 0
+                                val jaro = JaroWinkler()
+                                val lev = Levenshtein()
                                 for(l in s) {
-                                    val lev = Levenshtein(l,args[2])
-                                    if (lev.getSimilarity() <3) {
+                                    if (lev.getSimilarity(l,find) <3 || jaro.compare(l,find)>0.8) {
                                         count +=1
                                         var s: MutableSet<String> = jedis.smembers(l)
                                         for (i in s) {

@@ -5,18 +5,18 @@ public class Levenshtein
     private int[][] matrix;
     private Boolean calculated = false;
 
-    public Levenshtein(String one, String two)
+    public Levenshtein()
+    {
+
+    }
+
+    public int getSimilarity(String one, String two)
     {
         compOne = one;
         compTwo = two;
-    }
-
-    public int getSimilarity()
-    {
-        if (!calculated)
-        {
+       // if (!calculated) {
             setupMatrix();
-        }
+       // }
         return matrix[compOne.length()][compTwo.length()];
     }
 
