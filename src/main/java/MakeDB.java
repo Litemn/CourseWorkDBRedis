@@ -4,6 +4,7 @@ import org.json.simple.parser.JSONParser;
 import redis.clients.jedis.Jedis;
 
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -42,12 +43,13 @@ public class MakeDB {
            // int i = 1;
             for(Object s: ar){
                 Car car = gson.fromJson(s.toString(),Car.class);
+                Date date = new Date(car.getDate_realease()*1000);
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put(ID_CAR,car.getId_car()+"");
                 map.put(MODEL,car.getModel());
                 map.put(ENGINE,car.getEngine());
                 map.put(BODY_TYPE, car.getBodyType() );
-                map.put(DATE_RELEASE, car.getDate_realease()+"");
+                map.put(DATE_RELEASE, new SimpleDateFormat("dd MMMM yyyy").format(date));
                 map.put(MILEAGE, car.getMileage() + "");
                 map.put(PTS,car.getPts());
                 map.put(COLOR, car.getColor());
@@ -59,10 +61,10 @@ public class MakeDB {
                     maxCarId = car.getId_car();
                 }
                 jedis.sadd(car.getColor().toLowerCase(),car.getId_car()+"");
-                jedis.zadd(CARSPRICE,car.getPrice(),car.getId_car()+"");
+                jedis.zadd(CARSPRICE, car.getPrice(), car.getId_car() + "");
 
                 jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
-                jedis.sadd(COLOR_SET,car.getColor().toLowerCase());
+                jedis.sadd(COLOR_SET, car.getColor().toLowerCase());
                 jedis.sadd(BRAND_SET, car.getBrand());
 
                 jedis.set(MAXID, maxCarId+"");
