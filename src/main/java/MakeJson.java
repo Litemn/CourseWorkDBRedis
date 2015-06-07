@@ -31,7 +31,7 @@ public class MakeJson {
                 model = model_names[mileage % model_names.length];
                 engine = types[mileage % types.length];
                 date = Calendar.getInstance();
-                date.set(1950 + mileage % 65, mileage % 12, mileage % 29);
+                date.set(1970 + mileage % 65, mileage % 12, mileage % 29);
                 photo = getURL(String.valueOf(mileage));
 
                 JsonObject object = new JsonObject();
