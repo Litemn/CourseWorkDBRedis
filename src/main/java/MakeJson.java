@@ -49,17 +49,6 @@ public class MakeJson {
                 writer.println(object.toString());
             }
             writer.println("]");
-//                    "id_car": "100249",
-//                    "model": "314318",
-//                    "engine": "207963",
-//                    "bodyType": "5",
-//                    "date_release": "05-MAR-08",
-//                    "mileage": "500000",
-//                    "pts": "87 СР 794237",
-//                    "color": "серый",
-//                    "price": "1280000",
-//                    "photo_id": "",
-//                    "final_price": "1280000"
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
