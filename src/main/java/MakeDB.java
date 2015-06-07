@@ -34,7 +34,7 @@ public class MakeDB {
         int maxCarId = 0;
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("src/main/resources/cars.json"));
+            Object obj = parser.parse(new FileReader("src/main/resources/cars2.json"));
             Jedis jedis = new Jedis("localhost");
 
             JSONArray   ar  = (JSONArray)obj;

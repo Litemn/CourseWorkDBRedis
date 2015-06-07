@@ -159,7 +159,7 @@ fun main(args: Array<String>) {
                                 val jaro = JaroWinkler()
                                 val lev = Levenshtein()
                                 for(l in s) {
-                                    if (lev.getSimilarity(l,find) <3 || jaro.compare(l,find)>0.8) {
+                                    if (lev.getSimilarity(l,find) <3 || jaro.compare(l,find)>0.9) {
                                         count +=1
                                         var s: MutableSet<String> = jedis.smembers(l)
                                         for (i in s) {

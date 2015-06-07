@@ -62,7 +62,7 @@ public class MakeJson {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
             byte[] array = md.digest(md5.getBytes());
             StringBuilder sb = new StringBuilder();
-            sb.append("www.goo.gl\\");
+            sb.append("www.goo.gl/");
             for (byte anArray : array) {
                 sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
             }
