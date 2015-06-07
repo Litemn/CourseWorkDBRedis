@@ -63,7 +63,8 @@ public class MakeDB {
 
                 jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
                 jedis.sadd(COLOR_SET, car.getColor().toLowerCase());
-                jedis.sadd(BRAND_SET, car.getBrand());
+                jedis.sadd(BRAND_SET, car.getBrand().toLowerCase());
+                jedis.sadd(car.getBrand().toLowerCase(),car.getId_car()+"");
 
                 jedis.set(MAXID, maxCarId+"");
                 jedis.hmset(ID_PREFIX + car.getId_car(),map);
