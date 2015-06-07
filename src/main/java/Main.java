@@ -17,7 +17,7 @@ public class Main {
     
     public static void main(String[] arg){
 
-      JaroWinkler jaro = new JaroWinkler();
+        JaroWinkler jaro = new JaroWinkler();
         Levenshtein lev = new Levenshtein("test","rrr4");
         System.out.print(jaro.getSimilarity("test", "rest")+" "+lev.getSimilarity());
 

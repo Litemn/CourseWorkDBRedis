@@ -53,13 +53,13 @@ public class MakeDB {
                 map.put(COLOR, car.getColor());
                 map.put(PRICE,car.getPrice()+"");
                 map.put(PHOTO_ID, car.getPhoto_id());
-                map.put(FINAL_PRICE,car.getFinal_price()+"");
+              //  map.put(FINAL_PRICE,car.getFinal_price()+"");
                 if(car.getId_car()>maxCarId){
                     maxCarId = car.getId_car();
                 }
                 jedis.sadd(car.getColor().toLowerCase(),car.getId_car()+"");
                 jedis.zadd(CARSPRICE,car.getPrice(),car.getId_car()+"");
-                jedis.zadd(FINALCARSPRICE,car.getFinal_price(),car.getId_car()+"");
+               // jedis.zadd(FINALCARSPRICE,car.getFinal_price(),car.getId_car()+"");
                 jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
                 jedis.sadd(COLOR_SET,car.getColor().toLowerCase());
 
