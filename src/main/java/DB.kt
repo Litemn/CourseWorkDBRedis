@@ -83,8 +83,8 @@ fun main(args: Array<String>) {
 
                             map.put(MakeDB.PHOTO_ID, it.next())
                         }
-                        "finalprice" -> {
-                            map.put(MakeDB.FINAL_PRICE, it.next())
+                        "brand" -> {
+                            map.put(MakeDB.BRAND, it.next())
                         }
                         else -> {
                             println("param "+p+" wrong")
@@ -176,6 +176,26 @@ fun main(args: Array<String>) {
                                 if(count==0){
                                     println("No car with this color")
                                 }
+
+                            }
+
+
+                        }
+                        "magic" ->{
+                            if(args.size()>=2){
+                                var brand: String = args[1]
+                                var min : Int = 0
+                                var max : Int = 99999999
+                                if(args.size()>=3){
+                                    min = args[2].toInt()
+                                    if(args.size()>=4){
+                                        max = args[3].toInt()
+                                    }
+                                }
+
+
+
+
 
                             }
                         }
