@@ -38,18 +38,16 @@ public class MakeDB {
             Object obj = parser.parse(new FileReader("src/main/resources/cars.json"));
             Jedis jedis = new Jedis("localhost");
 
-            JSONArray   ar  = (JSONArray)obj;
+            JSONArray ar  = (JSONArray)obj;
 
-           // int i = 1;
             for(Object s: ar){
                 Car car = gson.fromJson(s.toString(),Car.class);
-                Date date = new Date(car.getDate_realease()*1000);
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put(ID_CAR,car.getId_car()+"");
                 map.put(MODEL,car.getModel());
                 map.put(ENGINE,car.getEngine());
                 map.put(BODY_TYPE, car.getBodyType() );
-                map.put(DATE_RELEASE, new SimpleDateFormat("dd MMMM yyyy").format(date));
+                map.put(DATE_RELEASE, car.getDate_realease() + "");
                 map.put(MILEAGE, car.getMileage() + "");
                 map.put(PTS,car.getPts());
                 map.put(COLOR, car.getColor());
