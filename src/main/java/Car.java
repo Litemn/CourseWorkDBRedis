@@ -2,7 +2,7 @@
  * Created by litemn on 21.04.15.
  */
 public class Car {
-    public Car(int id_car, int model, int engine, int bodyType, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
+    public Car(int id_car, String model, String engine, String bodyType, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
         this.id_car = id_car;
         this.model = model;
         this.engine = engine;
@@ -18,11 +18,11 @@ public class Car {
 
     private int id_car;
 
-    public int getModel() {
+    public String getModel() {
         return model;
     }
 
-    public void setModel(int model) {
+    public void setModel(String model) {
         this.model = model;
     }
 
@@ -34,19 +34,19 @@ public class Car {
         this.id_car = id_car;
     }
 
-    public int getEngine() {
+    public String getEngine() {
         return engine;
     }
 
-    public void setEngine(int engine) {
+    public void setEngine(String engine) {
         this.engine = engine;
     }
 
-    public int getBodyType() {
+    public String getBodyType() {
         return bodyType;
     }
 
-    public void setBodyType(int bodyType) {
+    public void setBodyType(String bodyType) {
         this.bodyType = bodyType;
     }
 
@@ -106,9 +106,19 @@ public class Car {
         this.photo_id = photo_id;
     }
 
-    private int model;
-    private int engine;
-    private int bodyType;
+    private String model;
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    private String brand;
+    private String engine;
+    private String bodyType;
     private int mileage;
     private int price;
     private int final_price;
