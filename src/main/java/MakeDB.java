@@ -13,7 +13,7 @@ public class MakeDB {
 
     public static final String ID_CAR = "id_car";
     public static final String MODEL = "model";
-     public static final String BRAND = "brand";
+    public static final String BRAND = "brand";
     public static final String ENGINE = "engine";
     public static final String BODY_TYPE = "bodyType";
     public static final String DATE_RELEASE = "date_release";
@@ -27,6 +27,7 @@ public class MakeDB {
     public static final String MAXID = "MAXID";
     public static final String ID_PREFIX = "car:id:";
     public static final String COLOR_SET = "COLOR_SET";
+    public static final String BRAND_SET = "BRAND_SET";
 
     public static void main(String[] arg){
         Gson gson = new Gson();
@@ -41,18 +42,18 @@ public class MakeDB {
            // int i = 1;
             for(Object s: ar){
                 Car car = gson.fromJson(s.toString(),Car.class);
-                HashMap<String,String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<String, String>();
                 map.put(ID_CAR,car.getId_car()+"");
                 map.put(MODEL,car.getModel());
                 map.put(ENGINE,car.getEngine());
                 map.put(BODY_TYPE, car.getBodyType() );
-                map.put(DATE_RELEASE, car.getDate_realease());
+                map.put(DATE_RELEASE, car.getDate_realease()+"");
                 map.put(MILEAGE, car.getMileage() + "");
                 map.put(PTS,car.getPts());
                 map.put(COLOR, car.getColor());
                 map.put(PRICE,car.getPrice()+"");
                 map.put(PHOTO_ID, car.getPhoto_id());
-                map.put(BRAND,car.getBrand());
+                map.put(BRAND, car.getBrand());
 
                 if(car.getId_car()>maxCarId){
                     maxCarId = car.getId_car();
@@ -62,6 +63,7 @@ public class MakeDB {
 
                 jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
                 jedis.sadd(COLOR_SET,car.getColor().toLowerCase());
+                jedis.sadd(BRAND_SET, car.getBrand());
 
                 jedis.set(MAXID, maxCarId+"");
                 jedis.hmset(ID_PREFIX + car.getId_car(),map);

@@ -2,7 +2,7 @@
  * Created by litemn on 21.04.15.
  */
 public class Car {
-    public Car(int id_car, String model, String engine, String bodyType, int mileage, int price, int final_price, String date_release, String pts, String color, String photo_id) {
+    public Car(int id_car, String model, String engine, String bodyType, int mileage, int price, int final_price, int date_release, String pts, String color, String photo_id) {
         this.id_car = id_car;
         this.model = model;
         this.engine = engine;
@@ -74,11 +74,11 @@ public class Car {
         this.final_price = final_price;
     }
 
-    public String getDate_realease() {
+    public int getDate_realease() {
         return date_release;
     }
 
-    public void setDate_realease(String date_realease) {
+    public void setDate_realease(int date_realease) {
         this.date_release = date_realease;
     }
 
@@ -122,7 +122,8 @@ public class Car {
     private int mileage;
     private int price;
     private int final_price;
-    private String date_release, pts, color, photo_id;
+    private int date_release;
+    private String pts, color, photo_id;
     Car(){
 
     }
