@@ -181,28 +181,70 @@ fun main(args: Array<String>) {
 
 
                         }
-                        "magic" ->{
-                            if(args.size()>=2){
-                                var brand: String = args[1]
-                                var min : Int = 0
-                                var max : Int = 99999999
-                                if(args.size()>=3){
-                                    min = args[2].toInt()
-                                    if(args.size()>=4){
-                                        max = args[3].toInt()
-                                    }
-                                }
 
-
-
-
-
-                            }
-                        }
                     }
                 }
 
 
+            }
+
+            "magic" ->{
+                if(args.size()>=2){
+                    var brand: String = args[1].toLowerCase()
+                    var min : Double = 0.0
+                    var max : Double = 99999999.0
+                    if(args.size()>=3){
+                        min = args[2].toDouble()
+                        if(args.size()>=4){
+                            max = args[3].toDouble()
+                        }
+                    }
+
+                    var s: MutableSet<String> = jedis.smembers(MakeDB.BRAND_SET)
+
+                    if(brand in s){
+
+                        var price: MutableSet<String> =jedis.zrangeByScore(MakeDB.CARSPRICE,min,max)
+                        for(t in price){
+
+                            jedis.sadd("TEMP1",t);
+                        }
+
+
+
+                        var res: MutableSet<String> = jedis.sinter(brand,"TEMP1")
+
+                        for(k in res) {
+                            val map = jedis.hgetAll(MakeDB.ID_PREFIX + k)
+                            for (item in map) {
+                                println(item.getKey() + " - " + item.getValue())
+                            }
+                            println("")
+                        }
+                    }else{
+                       var count: Int = 0
+                        for(i in s){
+                            if(EditDistance.distance(i,brand)<4){
+                                var price: MutableSet<String> =jedis.zrangeByScore(MakeDB.CARSPRICE,min,max)
+                                var b: MutableSet<String> = jedis.smembers(i)
+                                price.retainAll(b)
+                                for(k in price){
+                                    count+=1
+                                    val map = jedis.hgetAll(MakeDB.ID_PREFIX + k)
+                                    for (item in map) {
+                                        println(item.getKey() + " - " + item.getValue())
+                                    }
+                                    println("")
+                                }
+                            }
+                        }
+                        if(count==0){
+                            print("Not Car found")
+                        }
+                    }
+
+
+                }
             }
 
             else -> print("error")
