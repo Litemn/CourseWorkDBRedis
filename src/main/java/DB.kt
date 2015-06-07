@@ -151,7 +151,28 @@ fun main(args: Array<String>) {
                                 }
 
                             }else {
-                                println("No car with this color")
+                                var s: MutableSet<String> = jedis.smembers(MakeDB.COLOR_SET)
+                                var count :Int = 0
+                                for(l in s) {
+                                    val lev = Levenshtein(l,args[2])
+                                    if (lev.getSimilarity() <3) {
+                                        count +=1
+                                        var s: MutableSet<String> = jedis.smembers(l)
+                                        for (i in s) {
+                                            var map: MutableMap<String, String> = HashMap<String, String>()
+                                            map = jedis.hgetAll(MakeDB.ID_PREFIX + i)
+                                            for (item in map) {
+                                                println(item.getKey() + " - " + item.getValue())
+                                            }
+                                            println("")
+
+                                        }
+                                    }
+                                }
+                                if(count==0){
+                                    println("No car with this color")
+                                }
+
                             }
                         }
                     }

@@ -16,11 +16,14 @@ public class Main {
     }
     
     public static void main(String[] arg){
-        init();
-        System.out.println("");
-        System.out.println("Enter commands");
 
-        
+      JaroWinkler jaro = new JaroWinkler();
+        Levenshtein lev = new Levenshtein("test","rrr4");
+        System.out.print(jaro.getSimilarity("test", "rest")+" "+lev.getSimilarity());
+
+
+
+
     }
 
     private static void add(){
