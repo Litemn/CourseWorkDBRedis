@@ -1,7 +1,10 @@
 import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.Transaction;
 
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
@@ -36,8 +39,13 @@ public class MakeDB {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader("src/main/resources/cars2.json"));
-            Jedis jedis = new Jedis("localhost");
 
+            Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
+            jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30001));
+            jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30002));
+            jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30003));
+
+            JedisCluster jedis = new JedisCluster(jedisClusterNodes);
             JSONArray ar  = (JSONArray)obj;
 
             for(Object s: ar){

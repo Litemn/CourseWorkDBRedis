@@ -2,7 +2,9 @@ import EditDistance
 import JaroWinkler
 import Levenshtein
 import MakeDB
+import redis.clients.jedis.HostAndPort
 import redis.clients.jedis.Jedis
+import redis.clients.jedis.JedisCluster
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.text.Regex
@@ -13,14 +15,20 @@ import kotlin.text.Regex
 
 
 fun main(args: Array<String>) {
-    val jedis = Jedis("localhost")
+    val jedisClusterNodes = HashSet<HostAndPort>()
+    jedisClusterNodes.add(HostAndPort("127.0.0.1", 30001))
+    jedisClusterNodes.add(HostAndPort("127.0.0.1", 30002))
+    jedisClusterNodes.add(HostAndPort("127.0.0.1", 30003))
+
+
+    val jebis = JedisCluster(jedisClusterNodes)
     val param = arrayOf("brand", "model", "engine", "bodytype", "daterelease", "mileage", "pts", "color", "price", "photoid")
 
     if (args.size() > 0)
 
         when (args[0].toLowerCase()) {
             "new", "edit" -> {
-
+                val jedis = Jedis("localhost")
                 val it: Iterator<String> = args.iterator()
                 var ID = jedis.get(MakeDB.MAXID)
 
@@ -34,6 +42,7 @@ fun main(args: Array<String>) {
                         map = jedis.hgetAll(MakeDB.ID_PREFIX + ID)
                     }
                 } else {
+
                     jedis.incr(MakeDB.MAXID)
                 }
 
@@ -42,13 +51,13 @@ fun main(args: Array<String>) {
                     val p = it.next().toLowerCase().replace("_", "")
                     when (p) {
                         "brand" -> {
-                            map.put(MakeDB.BRAND, it.next())
+                            map.put(MakeDB.BRAND, it.next().replace("_", " "))
                         }
                         "model" -> {
-                            map.put(MakeDB.MODEL, it.next())
+                            map.put(MakeDB.MODEL, it.next().replace("_", " "))
                         }
                         "engine" -> {
-                            map.put(MakeDB.ENGINE, it.next())
+                            map.put(MakeDB.ENGINE, it.next().replace("_", " "))
                         }
                         "bodytype" -> {
                             map.put(MakeDB.BODY_TYPE, it.next())
@@ -111,6 +120,7 @@ fun main(args: Array<String>) {
 
             "del" -> {
                 if (args.size() >= 2) {
+                    val jedis = Jedis("localhost")
                     println("R you sure?(yes/no)")
                     val temp = readLine().toString()
                     if (temp.startsWith("y")) {
@@ -124,6 +134,7 @@ fun main(args: Array<String>) {
             }
             "get" -> {
                 if (args.size() > 1) {
+                    val jedis = Jedis("localhost")
                     if (args[1].matches("[0-9]+".toRegex())) {
                         var map: MutableMap<String, String> = HashMap<String, String>()
                         map = jedis.hgetAll(MakeDB.ID_PREFIX + args[1])
@@ -145,6 +156,7 @@ fun main(args: Array<String>) {
                     val find: String = EditDistance.translate(args[2])
                     when (args[1].toLowerCase()) {
                         "color" -> {
+                            val jedis = Jedis("localhost")
                             var s: MutableSet<String> = jedis.smembers(MakeDB.COLOR_SET)
                             if (find in s) {
                                 var s: MutableSet<String> = jedis.smembers(find)
@@ -201,7 +213,7 @@ fun main(args: Array<String>) {
                 }
             }
 
-            "magic" -> {
+            "magic" -> {//search cars by price and brand
                 if (args.size() >= 2) {
                     var brand: String = args[1].toLowerCase()
                     var min: Double = 0.0
@@ -212,7 +224,7 @@ fun main(args: Array<String>) {
                             max = args[3].toDouble()
                         }
                     }
-
+                    val jedis = Jedis("localhost")
                     var s: MutableSet<String> = jedis.smembers(MakeDB.BRAND_SET)
 
                     if (brand in s) {

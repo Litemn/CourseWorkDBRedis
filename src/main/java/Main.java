@@ -13,9 +13,13 @@ public class Main {
     private static void init(){
         JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
         jedis = pool.getResource();
+
+
     }
     
     public static void main(String[] arg){
+        Jedis jedis = new Jedis("localhost");
+
 
         JaroWinkler jaro = new JaroWinkler();
      //   Levenshtein lev = new Levenshtein("test","rrr4");
