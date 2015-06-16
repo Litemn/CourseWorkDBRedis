@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import redis.clients.jedis.HostAndPort;
@@ -6,7 +7,10 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.Transaction;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,51 +40,81 @@ public class MakeDB {
     public static void main(String[] arg){
         Gson gson = new Gson();
         int maxCarId = 0;
-        JSONParser parser = new JSONParser();
+       // JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("src/main/resources/cars2.json"));
+           //Object obj = parser.parse(new FileReader("src/main/resources/cars2.json"));
 
+            BufferedReader reader = null;
             Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30001));
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30002));
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", 30003));
 
             JedisCluster jedis = new JedisCluster(jedisClusterNodes);
-            JSONArray ar  = (JSONArray)obj;
 
-            for(Object s: ar){
-                Car car = gson.fromJson(s.toString(),Car.class);
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put(ID_CAR,car.getId_car()+"");
-                map.put(MODEL,car.getModel());
-                map.put(ENGINE,car.getEngine());
-                map.put(BODY_TYPE, car.getBodyType() );
-                map.put(DATE_RELEASE, car.getDate_realease() + "");
-                map.put(MILEAGE, car.getMileage() + "");
-                map.put(PTS,car.getPts());
-                map.put(COLOR, car.getColor());
-                map.put(PRICE,car.getPrice()+"");
-                map.put(PHOTO_ID, car.getPhoto_id());
-                map.put(BRAND, car.getBrand());
+            int l =  0;
+            int m = 10000;
 
-                if(car.getId_car()>maxCarId){
-                    maxCarId = car.getId_car();
+            try {
+                File file = new File("src/main/resources/cars2.json");
+                reader = new BufferedReader(new FileReader(file));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    l++;
+                    if(l==m){
+                        System.out.println(l);
+                        m+=10000;
+                    }
+
+                 //   System.out.println(line);
+                    Car car = gson.fromJson(line,Car.class);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put(ID_CAR,car.getId_car()+"");
+                    map.put(MODEL,car.getModel());
+                    map.put(ENGINE,car.getEngine());
+                    map.put(BODY_TYPE, car.getBodyType() );
+                    map.put(DATE_RELEASE, car.getDate_realease() + "");
+                    map.put(MILEAGE, car.getMileage() + "");
+                    map.put(PTS,car.getPts());
+                    map.put(COLOR, car.getColor());
+                    map.put(PRICE,car.getPrice()+"");
+                    map.put(PHOTO_ID, car.getPhoto_id());
+                    map.put(BRAND, car.getBrand());
+
+                    if(car.getId_car()>maxCarId){
+                        maxCarId = car.getId_car();
+                    }
+                    jedis.sadd(car.getColor().toLowerCase(),car.getId_car()+"");
+                    jedis.zadd(CARSPRICE, car.getPrice(), car.getId_car() + "");
+
+                    jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
+                    jedis.sadd(COLOR_SET, car.getColor().toLowerCase());
+                    jedis.sadd(BRAND_SET, car.getBrand().toLowerCase());
+                    jedis.sadd(car.getBrand().toLowerCase(),car.getId_car()+"");
+
+                    jedis.set(MAXID, maxCarId+"");
+                    jedis.hmset(ID_PREFIX + car.getId_car(),map);
                 }
-                jedis.sadd(car.getColor().toLowerCase(),car.getId_car()+"");
-                jedis.zadd(CARSPRICE, car.getPrice(), car.getId_car() + "");
 
-                jedis.zadd(ZMILAGE,car.getMileage(),car.getId_car()+"");
-                jedis.sadd(COLOR_SET, car.getColor().toLowerCase());
-                jedis.sadd(BRAND_SET, car.getBrand().toLowerCase());
-                jedis.sadd(car.getBrand().toLowerCase(),car.getId_car()+"");
-
-                jedis.set(MAXID, maxCarId+"");
-                jedis.hmset(ID_PREFIX + car.getId_car(),map);
-
-
-
-
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+
+
+
+
+
+
+
+
 
 
         }catch (Exception e){

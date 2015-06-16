@@ -22,8 +22,8 @@ public class MakeJson {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter("cars2.json");
-            writer.println("[");
-            for (int i = 0; i < 10000; i++) {
+           // writer.println("[");
+            for (int i = 0; i < 1000000; i++) {
                 mileage = gen.nextInt(999999);
                 color = colors[mileage % colors.length];
                 pts = (mileage % 90 + 10) + " " + color.charAt(0) + color.charAt(2) + " " + mileage;
@@ -50,7 +50,7 @@ public class MakeJson {
                 object.addProperty("photo_id", photo);
                 writer.println(object.toString());
             }
-            writer.println("]");
+          //  writer.println("]");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
